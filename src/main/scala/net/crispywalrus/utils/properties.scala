@@ -1,4 +1,4 @@
-package com.crispywalrus.hbasic.config
+package net.crispywalrus.utils
 
 import java.io.{ IOException, PrintWriter }
 
