@@ -1,4 +1,4 @@
-package com.rocketlaywer.amqp
+package com.crispywalrus.basic.amqp
 
 import java.io.IOException
 
@@ -11,11 +11,11 @@ import akka.util.duration._
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client._
 
-import com.rocketlaywer.amqp.ChannelOwner.{Data, State}
-import com.rocketlaywer.amqp.ConnectionOwner.{CreateChannel, Shutdown}
-import com.rocketlaywer.amqp.Amqp._
-import com.rocketlaywer.amqp.RpcServer.ProcessResult
-import com.rocketlaywer.amqp.RpcClient.RpcResult
+import com.crispywalrus.basic.amqp.ChannelOwner.{Data, State}
+import com.crispywalrus.basic.amqp.ConnectionOwner.{CreateChannel, Shutdown}
+import com.crispywalrus.basic.amqp.Amqp._
+import com.crispywalrus.basic.amqp.RpcServer.ProcessResult
+import com.crispywalrus.basic.amqp.RpcClient.RpcResult
 
 object ChannelOwner {
 

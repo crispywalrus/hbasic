@@ -1,4 +1,4 @@
-package com.rocketlaywer.amqp
+package com.crispywalrus.basic.amqp
 
 import java.util.concurrent.CountDownLatch
 import java.util.Date
