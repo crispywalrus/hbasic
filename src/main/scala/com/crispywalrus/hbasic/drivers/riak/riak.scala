@@ -1,4 +1,4 @@
-package com.crispywalrus.basic.managers
+package com.crispywalrus.hbasic.drivers.riak
 
 import akka.actor._
 import com.stackmob.scaliak._
@@ -8,7 +8,9 @@ import com.lambdaworks.jacks.JacksMapper._
 import scalaz._
 import Scalaz._
 
-class StorageManager(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tuple2(Some(8098),None))
+import com.crispywalrus.hbasic.drivers._
+
+class Riak(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tuple2(Some(8098),None))
 {
   val client = port._2 match {
     case None => Scaliak.httpClient(host)
@@ -20,18 +22,10 @@ class StorageManager(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tu
 
 }
 
-class DomainObject(val key:String,val data:String)
-
-object DomainObject {
-  implicit val domainConverter: ScaliakConverter[DomainObject] = ScaliakConverter.newConverter[DomainObject](
-    (o: ReadObject) => new DomainObject(o.key,o.stringValue).successNel,
-    (o: DomainObject) => WriteObject(o.key,o.data.getBytes))
-}
-
-class BucketManager(val name:String,storageManager:StorageManager)
+class RiakBucket(val name:String,server:Riak)
 {
 
-  val bucket:ScaliakBucket = storageManager.client.bucket(name).unsafePerformIO match {
+  val bucket:ScaliakBucket = server.client.bucket(name).unsafePerformIO match {
     case Success(b) => b
     case Failure(e) => throw e
   }
@@ -40,7 +34,7 @@ class BucketManager(val name:String,storageManager:StorageManager)
     if( bucket.store(model).unsafePerformIO.isFailure )
       throw new Exception("unable to store "+model.key+" in bucket "+name)
 
-  def fetch(key:String):Option[DomainObject] = {
+  def get(key:String):Option[DomainObject] = {
     bucket.fetch(key).unsafePerformIO match {
       case Success(roo) => {
         roo match {

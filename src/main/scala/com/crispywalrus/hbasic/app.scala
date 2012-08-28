@@ -1,10 +1,10 @@
-package com.crispywalrus.basic
+package com.crispywalrus.hbasic
 
 import akka.actor._
 import grizzled.slf4j.Logging
 import unfiltered.netty.Http
 
-import com.crispywalrus.basic.managers._
+import com.crispywalrus.hbasic.managers._
 
 object HBasic extends App with Logging {
 

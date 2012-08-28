@@ -1,4 +1,4 @@
-package com.crispywalrus.basic
+package com.crispywalrus.hbasic.managers
 
 import akka.actor._
 import grizzled.slf4j.Logging
@@ -8,7 +8,7 @@ import unfiltered.response._
 
 trait WebTrait extends cycle.Plan with cycle.ThreadPool with ServerErrorResponse
 
-class WebManager(val system:ActorSystem) extends WebTrait with com.crispywalrus.basic.managers.Manager with Logging {
+class WebManager(val system:ActorSystem) extends WebTrait with com.crispywalrus.hbasic.managers.Manager with Logging {
 
   private [this] var isRunning:Boolean = false
 

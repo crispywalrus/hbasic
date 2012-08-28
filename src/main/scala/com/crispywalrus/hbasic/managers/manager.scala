@@ -1,4 +1,4 @@
-package com.crispywalrus.basic.managers
+package com.crispywalrus.hbasic.managers
 
 trait Manager {
   def start:Either[Unit,Throwable]

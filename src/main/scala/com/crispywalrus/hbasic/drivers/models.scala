@@ -1,4 +1,4 @@
-package com.crispywalrus.basic.drivers
+package com.crispywalrus.hbasic.drivers
 
 import scalaz._
 import Scalaz._
