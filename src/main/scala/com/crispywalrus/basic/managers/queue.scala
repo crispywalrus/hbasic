@@ -4,8 +4,7 @@ import akka.actor._
 import com.rabbitmq.client.ConnectionFactory
 import grizzled.slf4j.Logging
 
-import com.crispywalrus.basic.Manager
-import com.crispywalrus.basic.amqp._
+import com.crispywalrus.basic.driver.amqp._
 import Amqp._
 
 class QueueManager(val system:ActorSystem) extends Manager with Logging {

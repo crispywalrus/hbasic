@@ -1,4 +1,4 @@
-package com.rocketlawyer.riak
+package com.crispywalrus.basic.drivers.riak
 
 import akka.actor._
 import com.stackmob.scaliak._
@@ -7,6 +7,8 @@ import bucket._
 import com.lambdaworks.jacks.JacksMapper._
 import scalaz._
 import Scalaz._
+
+import com.crispywalrus.basic.drivers._
 
 class Riak(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tuple2(Some(8098),None))
 {
@@ -18,14 +20,6 @@ class Riak(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tuple2(Some(
     })
   }
 
-}
-
-class DomainObject(val key:String,val data:String)
-
-object DomainObject {
-  implicit val domainConverter: ScaliakConverter[DomainObject] = ScaliakConverter.newConverter[DomainObject](
-    (o: ReadObject) => new DomainObject(o.key,o.stringValue).successNel,
-    (o: DomainObject) => WriteObject(o.key,o.data.getBytes))
 }
 
 class RiakBucket(val name:String,server:Riak)
