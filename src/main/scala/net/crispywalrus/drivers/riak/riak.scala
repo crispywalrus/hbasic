@@ -1,4 +1,4 @@
-package com.crispywalrus.hbasic.drivers.riak
+package net.crispywalrus.drivers.riak
 
 import akka.actor._
 import com.stackmob.scaliak._
@@ -8,7 +8,13 @@ import com.lambdaworks.jacks.JacksMapper._
 import scalaz._
 import Scalaz._
 
-import com.crispywalrus.hbasic.drivers._
+class DomainObject(val key:String,val data:String)
+object DomainObject {
+  implicit val domainConverter: ScaliakConverter[DomainObject] = ScaliakConverter.newConverter[DomainObject](
+    (o: ReadObject) => new DomainObject(o.key,o.stringValue).successNel,
+    (o: DomainObject) => WriteObject(o.key,o.data.getBytes))
+}
+
 
 class Riak(val host:String,val port:Tuple2[Option[Int],Option[Int]]=Tuple2(Some(8098),None))
 {
@@ -46,5 +52,8 @@ class RiakBucket(val name:String,server:Riak)
     }
   }
 
+  def delete(ob:DomainObject):Unit = bucket.delete(ob).unsafePerformIO 
+
+  def delete(key:String):Unit = bucket.deleteByKey(key).unsafePerformIO 
 }
 

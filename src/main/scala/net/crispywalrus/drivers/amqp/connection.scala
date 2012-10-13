@@ -1,4 +1,4 @@
-package com.crispywalrus.hbasic.driver.amqp
+package net.crispywalrus.drivers.amqp
 
 import java.io.IOException
 
@@ -9,7 +9,7 @@ import akka.util.Timeout._
 import akka.util.duration._
 import akka.util.Duration
 
-import com.crispywalrus.hbasic.driver.amqp.ConnectionOwner._
+import net.crispywalrus.drivers.amqp.ConnectionOwner._
 import com.rabbitmq.client.{Connection, ShutdownSignalException, ShutdownListener, ConnectionFactory}
 
 object ConnectionOwner {

@@ -1,4 +1,4 @@
-package com.crispywalrus.hbasic.driver.amqp
+package net.crispywalrus.drivers.amqp
 
 import java.util.concurrent.CountDownLatch
 import java.util.Date

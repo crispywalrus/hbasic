@@ -7,7 +7,16 @@ import org.scalacheck.{ Gen, Prop }
 import org.scalacheck.Arbitrary
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
-import BucketTools.floor
+
+class FakeClock extends net.crispywalrus.utils.Clock {
+  var fakeTime: Long = 0L
+
+  def now = fakeTime
+
+  def setTime(time: Long) {
+    fakeTime = time
+  }
+}
 
 @RunWith(classOf[JUnitRunner])
 class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaCheck {
@@ -53,7 +62,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
     "Given a relaxed bucket of capacity C with a refill rate of p tokens every s milliseconds" ^
     "and given that m milliseconds ago the bucket contained i tokens and none have since been consumed" ^
     "when I try to withdraw k tokens" ^
-    "where k <= C and k <= i + floor(m/s) * p, then I should get k tokens" ! {
+    "where k <= C and k <= i + (m/s) * p, then I should get k tokens" ! {
       val clock = new FakeClock
       val params = for {
         c <- choose(0, sup)
@@ -61,7 +70,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         s <- choose(1, maxInterval)
         m <- choose(1, maxInterval)
         i <- choose(0, sup)
-        k <- choose(0, math.min(c, i + floor(m / s) * p))
+        k <- choose(0, math.min(c, i + (m / s) * p))
       } yield (c, p, s, m, i, k)
       Prop.forAllNoShrink(params) {
         case (c, p, s, m, i, k) => {
@@ -72,7 +81,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         }
       }
     } ^
-    "where k <= C and k > r = i + floor(m/s) * p, then I should get r tokens" ! {
+    "where k <= C and k > r = i + (m/s) * p, then I should get r tokens" ! {
       val clock = new FakeClock
       val params = for {
         c <- chooseNum(0, sup)
@@ -80,8 +89,8 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         s <- chooseNum(1, maxInterval)
         m <- chooseNum(1, maxInterval)
         i <- chooseNum(0, sup)
-        k <- chooseNum(1 + i + floor(m / s) * p, c)
-        r <- i + floor(m / s) * p
+        k <- chooseNum(1 + i + (m / s) * p, c)
+        r <- i + (m / s) * p
       } yield (c, p, s, m, i, k, r)
       Prop.forAllNoShrink(params) {
         case (c, p, s, m, i, k, r) => {
@@ -93,7 +102,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         }
       }
     } ^
-    "where k > C and C <= i + floor(m/s) * p, then I should get C tokens" ! {
+    "where k > C and C <= i + (m/s) * p, then I should get C tokens" ! {
       val clock = new FakeClock
       val params = for {
         k <- chooseNum(1, sup)
@@ -101,7 +110,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         s <- chooseNum(1, maxInterval)
         m <- chooseNum(1, maxInterval)
         i <- chooseNum(0, sup)
-        c <- chooseNum(0, math.min(k - 1, i + floor(m / s) * p))
+        c <- chooseNum(0, math.min(k - 1, i + (m / s) * p))
       } yield (c, p, s, m, i, k)
       Prop.forAllNoShrink(params) {
         case (c, p, s, m, i, k) => {
@@ -113,7 +122,7 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         }
       }
     } ^
-    "where k > C and C > r = i + floor(m/s) * p, then I should get r tokens" ! {
+    "where k > C and C > r = i + (m/s) * p, then I should get r tokens" ! {
       val clock = new FakeClock
       val params = for {
         k <- chooseNum(1, sup)
@@ -121,8 +130,8 @@ class RelaxedBucketSpec extends org.specs2.SpecificationWithJUnit with ScalaChec
         s <- chooseNum(1, maxInterval)
         m <- chooseNum(1, maxInterval)
         i <- chooseNum(0, sup)
-        c <- chooseNum(1 + i + floor(m / s) * p, k - 1)
-        r <- i + floor(m / s) * p
+        c <- chooseNum(1 + i + (m / s) * p, k - 1)
+        r <- i + (m / s) * p
       } yield (c, p, s, m, i, k, r)
       Prop.forAllNoShrink(params) {
         case (c, p, s, m, i, k, r) => {

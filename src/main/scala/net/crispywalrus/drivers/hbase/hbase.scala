@@ -1,4 +1,4 @@
-package com.rocketlawyer.hbase
+package net.crispywalrus.drivers.hbase
 
 import org.hbase.async._
 import com.stumbleupon.async.{ Callback, Deferred }

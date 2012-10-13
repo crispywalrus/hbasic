@@ -51,6 +51,9 @@ object HBasic extends Build {
       "com.typesafe.akka" % "akka-actor" % "2.0.3",
       "com.twitter" % "util-core" % "5.3.6",
       "com.twitter" % "util-eval" % "5.3.6",
+      "org.scribe" % "scribe" % "1.3.2",
+      "org.specs2" %% "specs2" % "1.12.1" % "test",
+      "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
       "junit" % "junit" % "4.10" % "test",
       "org.mockito" % "mockito-all" % "1.9.0" % "test",
       "com.netflix.curator" % "curator-test" % "1.1.16" % "test"

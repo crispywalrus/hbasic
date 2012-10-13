@@ -1,26 +1,9 @@
 package net.crispywalrus.net.limit
 
-object BucketTools {
-  def floor(x: Long): Long = math.round(math.floor(x))
-}
+import scalaz._
+import Scalaz._
 
-trait Clock {
-  def now: Long
-}
-
-object RealTimeClock extends Clock {
-  def now = System.currentTimeMillis
-}
-
-class FakeClock extends Clock {
-  var fakeTime: Long = 0L
-
-  def now = fakeTime
-
-  def setTime(time: Long) {
-    fakeTime = time
-  }
-}
+import net.crispywalrus.utils._
 
 trait Tap {
   def drip: Long
@@ -33,7 +16,7 @@ object Tap {
 }
 
 class TapMaker {
-  var clock: Clock = RealTimeClock
+  var clock: Clock = MilliClock
   def usingClock(clock: Clock): TapMaker = {
     this.clock = clock
     this
@@ -41,8 +24,7 @@ class TapMaker {
   def make: Tap = new ClockBasedTap(clock)
 }
 
-class ClockBasedTap(clock: Clock = RealTimeClock) extends Tap {
-  import BucketTools.floor
+class ClockBasedTap(clock: Clock = MilliClock) extends Tap {
 
   var freq = 1000L
   var dropSize = 1L
@@ -61,7 +43,7 @@ class ClockBasedTap(clock: Clock = RealTimeClock) extends Tap {
   def drip = {
     val now = clock.now
     val deltaT = now - lastDripTime
-    val volume = floor(deltaT / freq) * dropSize
+    val volume = (deltaT / freq) * dropSize
     if (volume > 0) {
       lastDripTime = now
     }
