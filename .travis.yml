@@ -1,0 +1,13 @@
+language: scala
+scala:
+       - 2.10.0
+jdk:
+       - openjdk7
+       - oraclejdk7
+services:
+        - riak
+        - rabbitmq
+        - redis-server
+before_script:
+        - mysql -e 'create database action_test'
+
