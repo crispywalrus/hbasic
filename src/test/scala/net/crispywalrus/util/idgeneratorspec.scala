@@ -1,13 +1,17 @@
-package net.crispywalrus.util
+package net.crispywalrus.utils
 
-import org.specs2._
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
+import org.scalatest._
 
-@RunWith(classOf[JUnitRunner])
-class IdGeneratorSpec extends SpecificationWithJUnit with ScalaCheck {
+class IdGeneratorSpec extends FlatSpec {
 
-  def is = sequential ^
-    "Given a generator, when I consume m id's" ! check {}
+  val gen = new IdImpl(0,0)
+
+  "A generator" should "make new ids" in {
+    val id: Long = gen.nextId
+  }
+  it should "generate unique ids" in {
+    val results: Set[Long] = (0 to 9999).map({ _ => gen.nextId }).toSet
+    assert( results.size == 10000 )
+  }
 
 }
